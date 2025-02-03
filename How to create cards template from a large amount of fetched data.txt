@@ -1,1 +1,53 @@
+Follow the following step guide to have this dynamic card setup from data fetched -> 
+1)inside your functional component start by fetching the data and store it onto a variable 
+2)now inside the return statement have fragments setup and then inside it we just have to use {} and map on our variable having the data fetched and have a single product and index for the process and now inside our map function have a div pass key as index and destructure the data of traversal as needed via that single product.your desired property for the respective fields and there you have it your dynamic cars setup 
 
+3) this setup will create multiple cards based on the data 
+
+
+import React from 'react';
+
+// Component to render product cards dynamically based on the data fetched .
+const DynamicCard = () => {
+    // Here fetch the data or use the data provided -> Sample products data
+    const products = [
+        {
+            id: 1,
+            name: "Wireless Headphones",
+            price: "$99",
+            image: "https://via.placeholder.com/150",
+            description: "High-quality wireless headphones with noise cancellation."
+        },
+        {
+            id: 2,
+            name: "Smartwatch",
+            price: "$199",
+            image: "https://via.placeholder.com/150",
+            description: "Feature-rich smartwatch with health tracking."
+        },
+        {
+            id: 3,
+            name: "Gaming Mouse",
+            price: "$49",
+            image: "https://via.placeholder.com/150",
+            description: "Ergonomic gaming mouse with RGB lighting."
+        }
+    ];
+
+    return (
+        <>
+            {
+                products.map((product, index) => (
+                    <div key={index} style={{ border: "2px solid black" }}>
+                        <img src={product.image} alt={product.name} style={{ width: "100%", borderRadius: "5px" }} />
+                        <h3>{product.name}</h3>
+                        <p>{product.description}</p>
+                        <strong>{product.price}</strong>
+                    </div>
+                ))
+            }
+        </>
+    );
+};
+
+export default DynamicCard;
