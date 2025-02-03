@@ -1,0 +1,135 @@
+1) start by - npm i react-router-dom
+
+2) now in the app.jsx after setting up your basic router setup make a dynamic route using "/:id" and link it to a new product detail page 
+example ->       <Route path='/product/:id' element={<SpecificProductPage />} />
+
+3)now where you want to implement your dynamic routing import the link tag from the react-router-dom and add a link to the element which when clicked will navigate the user to our specific product detail page and in the link embedd the id of the product along with the link .
+
+example -> <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "blue" }}>
+                  <button style={{ marginTop: "10px", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}>View Details</button>
+           </Link>
+
+4)now the final step as the user will be redirected to the specificproduct page with the id slug we will now have all the products data also imported here in this specificproduct details page but the idea is just that this page will have a predefined template ready and we will use useParams method of our REACT ROUTER DOM to get the id from our slug link and based on that id this predefined template will fill the product details hence fullfilling the dynamic routing setup 
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+EXAMPLE SETUP -> 
+import React from 'react';
+import { Routes, Route } from "react-router-dom";
+import Home from './components/Home';
+import SpecificProductPage from './components/SpecificProductPage';
+
+const App = () => {
+  return (
+    <Routes>
+      <Route path='/' element={<Home />} />
+      <Route path='/product/:id' element={<SpecificProductPage />} />
+    </Routes>
+  )
+}
+
+export default App
+
+
+import React from 'react';
+import { Link } from "react-router-dom";
+
+
+// Component to render a single product card
+const DynamicCard = () => {
+    // Sample products data
+    const products = [
+        {
+            id: 1,
+            name: "Wireless Headphones",
+            price: "$99",
+            image: "https://via.placeholder.com/150",
+            description: "High-quality wireless headphones with noise cancellation."
+        },
+        {
+            id: 2,
+            name: "Smartwatch",
+            price: "$199",
+            image: "https://via.placeholder.com/150",
+            description: "Feature-rich smartwatch with health tracking."
+        },
+        {
+            id: 3,
+            name: "Gaming Mouse",
+            price: "$49",
+            image: "https://via.placeholder.com/150",
+            description: "Ergonomic gaming mouse with RGB lighting."
+        }
+    ];
+
+    return (
+        <>
+            {
+                products.map((product, key) => (
+                    <div key={key} style={{ border: "2px solid black" }}>
+                        <img src={product.image} alt={product.name} style={{ width: "100%", borderRadius: "5px" }} />
+                        <h3>{product.name}</h3>
+                        <p>{product.description}</p>
+                        <strong>{product.price}</strong>
+                        <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "blue" }}>
+                            <button style={{ marginTop: "10px", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}>View Details</button>
+                        </Link>
+                    </div>
+                ))
+            }
+        </>
+    );
+};
+
+export default DynamicCard;
+
+
+import React from 'react'
+import DynamicCard from './DynamicCard'
+
+const Home = () => {
+    return (
+        <div>
+            <DynamicCard />
+        </div>
+    )
+}
+
+export default Home
+
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+const products = [
+    { id: 1, name: "Wireless Headphones", price: "$99", image: "https://via.placeholder.com/150", description: "High-quality wireless headphones with noise cancellation." },
+    { id: 2, name: "Smartwatch", price: "$199", image: "https://via.placeholder.com/150", description: "Feature-rich smartwatch with health tracking." },
+    { id: 3, name: "Gaming Mouse", price: "$49", image: "https://via.placeholder.com/150", description: "Ergonomic gaming mouse with RGB lighting." }
+];
+
+const SpecificProductPage = () => {
+    const { id } = useParams(); // Get the product ID from URL
+    const navigate = useNavigate(); // For navigating back
+
+    // Find product by ID (convert id to number)
+    const product = products.find((p) => p.id === Number(id));
+
+    if (!product) return <h2 style={{ textAlign: "center" }}>Product Not Found</h2>;
+
+    return (
+        <div style={{ textAlign: "center", padding: "20px" }}>
+            <img src={product.image} alt={product.name} style={{ width: "200px", borderRadius: "10px" }} />
+            <h2>{product.name}</h2>
+            <p>{product.description}</p>
+            <strong>{product.price}</strong>
+            <br />
+            <button
+                onClick={() => navigate(-1)}
+                style={{ marginTop: "10px", padding: "10px", borderRadius: "5px", cursor: "pointer", backgroundColor: "black", color: "white" }}
+            >
+                Go Back
+            </button>
+        </div>
+    );
+};
+
+export default SpecificProductPage;
+
